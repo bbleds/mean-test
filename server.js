@@ -1,48 +1,47 @@
-// server.js
+//Simple server setup
 
-// modules =================================================
-var express        = require('express');
-var app            = express();
-var bodyParser     = require('body-parser');
-var methodOverride = require('method-override');
+//require http
+var http = require('http');
 
-// configuration ===========================================
+//file system module --> lets us work with files on device
+var fs = require("fs");
 
-// config files
-var db = require('./config/db');
+//404 response
+function send404Response(response){
+	response.writeHead(404, {"Content-Type" : "text/plain"});
+	response.write("Error 404: PAGE IS NOT FOUND BRUH");
+	response.end();
+}
 
-// set our port
-var port = process.env.PORT || 8080;
+//handle user requests
+function onRequest(request, response){
+	//request is what user wants
+	//response is what we send back
+			console.log(request.method);
+		  console.log("A user made a request "+ request.url);
+		  // response.writeHead(200, {"Context-Type": "text/plain"});
+		  // response.write("Here is the response and some sweeeeeet data");
+		  // response.end();
+		  // response.writeHead(200, {"Content-Type" : "text/html"});
+		  // fs.createReadStream("./index.html").pipe(response);
 
-// connect to our mongoDB database
-// (uncomment after you enter in your own credentials in config/db.js)
-// mongoose.connect(db.url);
 
-// get all data/stuff of the body (POST) parameters
-// parse application/json
-app.use(bodyParser.json());
 
-// parse application/vnd.api+json as json
-app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+		  //forward slash means send index file
+		  if(request.method === "GET" && request.url === "/"){
+		  		response.writeHead(200, {"Content-Type" : "text/html"});
+		  			//send readible stream for performance
+		  				//send file to response
+		  			fs.createReadStream("./public/views/index.html").pipe(response);
+		  } else {
+		  		send404Response(response);
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+		  }
 
-// override with the X-HTTP-Method-Override header in the request. simulate DELETE/PUT
-app.use(methodOverride('X-HTTP-Method-Override'));
+}
 
-// set the static files location /public/img will be /img for users
-app.use(express.static(__dirname + '/public'));
 
-// routes ==================================================
-require('./app/routes')(app); // configure our routes
+//create server
+http.createServer(onRequest).listen(8888);
+console.log("server is now runnning............");
 
-// start app ===============================================
-// startup our app at http://localhost:8080
-app.listen(port);
-
-// shoutout to the user
-console.log('Magic happens on port ' + port);
-
-// expose app
-exports = module.exports = app;
