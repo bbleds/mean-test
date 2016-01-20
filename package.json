@@ -1,0 +1,26 @@
+{
+  "name": "starter-node-angular",
+  "version": "1.0.0",
+  "description": "a simple MEAN stack test application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bbleds/mean-test.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bbleds/mean-test/issues"
+  },
+  "homepage": "https://github.com/bbleds/mean-test#readme",
+     "dependencies": {
+         "express" : "~4.5.1",
+         "mongoose" : "~3.8.0",
+         "body-parser" : "~1.4.2",
+         "method-override" : "~2.0.2"
+       }
+
+}
